@@ -4,6 +4,7 @@
 #include <QTextStream>
 #include <iostream>
 #include <QDebug>
+#include <QStringList>
 #include <QDateTime>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>

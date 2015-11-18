@@ -8,13 +8,22 @@ twit_func::twit_func(QObject *parent, QCoreApplication *coreApp)
 }
 
 void twit_func::run(){
+    QStringList argv = QCoreApplication::arguments();
+    bool input = false;
+    if(argv.size() > 1){
+        if(argv.at(1) == "input_auth_info"){
+            input = true;
+        }
+    }
     QString consumer_key;
     QString consumer_secret;
     QString oauth_token;
     QString oauth_token_secret;
 
     QSettings settings("tea_soak_lab", "cli_tweet");
-    if((settings.value("error_code").toInt() != 0) || (settings.value("consumer_key").toString() == "")){
+    if(settings.value("error_code").toInt() != 0) input=true;
+    if(settings.value("consumer_key").toString() == "") input=true;
+    if(input == true){
         if(settings.value("error_code").toInt() != 0){
             std::cout<<"前回投稿に失敗したようです。エラーは以下の通りです。"<<std::endl;
             std::cout<<"code:"<<settings.value("error_code").toInt()<<std::endl;
