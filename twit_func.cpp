@@ -14,8 +14,8 @@ void twit_func::run(){
     QString oauth_token_secret;
 
     QSettings settings("tea_soak_lab", "cli_tweet");
-    if(settings.value("consumer_key").toString() == ""){
-        std::cout<<"アクセスのための情報がないやで"<<std::endl;
+    if((settings.value("error_code").toInt() != 0) || (settings.value("consumer_key").toString() == "")){
+        std::cout<<"設定が存在しないか、前回投稿に失敗したようです。認証情報を入力してください。"<<std::endl;
         QTextStream in(stdin);
         std::cout<<"Consumer key: ";
         in>>consumer_key;
@@ -35,7 +35,6 @@ void twit_func::run(){
         oauth_token = settings.value("oauth_token").toString();
         oauth_token_secret = settings.value("oauth_token_secret").toString();
     }
-//    settings.setValue("tx_with_depo_limit",tx_with_depo_limit);
 
     QString update_url = "https://api.twitter.com/1.1/statuses/update.json";
 
@@ -108,6 +107,14 @@ QObject::connect(manager, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(qui
 
     eventLoop.exec();
 
-    settings.setValue("reply",reply->readAll());
+    QString reply_data = reply->readAll();
+    QJsonDocument json = QJsonDocument::fromJson(reply_data.toUtf8());
+    if(json.object().value("errors").toArray().at(0).toObject().value("code").toInt() != 0){
+        settings.setValue("error_code",json.object().value("errors").toArray().at(0).toObject().value("code").toInt());
+        settings.setValue("error_mess",json.object().value("errors").toArray().at(0).toObject().value("message").toString());
+    } else {
+        settings.setValue("error_code",0);
+        settings.setValue("error_mess","none.");
+    }
     app->quit();
 }

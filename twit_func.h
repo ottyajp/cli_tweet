@@ -12,6 +12,11 @@
 #include <QObject>
 #include <QThread>
 #include <QSettings>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonValue>
+#include <QJsonArray>
+#include <QRegularExpression>
 
 #include <openssl/sha.h>
 #include <openssl/hmac.h>
