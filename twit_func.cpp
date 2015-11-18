@@ -15,7 +15,15 @@ void twit_func::run(){
 
     QSettings settings("tea_soak_lab", "cli_tweet");
     if((settings.value("error_code").toInt() != 0) || (settings.value("consumer_key").toString() == "")){
-        std::cout<<"設定が存在しないか、前回投稿に失敗したようです。認証情報を入力してください。"<<std::endl;
+        if(settings.value("error_code").toInt() != 0){
+            std::cout<<"前回投稿に失敗したようです。エラーは以下の通りです。"<<std::endl;
+            std::cout<<"code:"<<settings.value("error_code").toInt()<<std::endl;
+            std::cout<<"Message:"<<settings.value("error_mess").toString().toStdString()<<std::endl;
+        }
+        if(settings.value("consumer_key").toString() == ""){
+            std::cout<<"設定が存在しないようです。"<<std::endl;
+        }
+        std::cout<<"認証情報を入力してください。"<<std::endl;
         QTextStream in(stdin);
         std::cout<<"Consumer key: ";
         in>>consumer_key;
@@ -42,8 +50,8 @@ void twit_func::run(){
     std::cout<<"text:";
     QTextStream in(stdin);
     in>>tweet;
-    std::string tweet_debug = tweet.toUtf8().constData();
-    std::cout<<tweet_debug;
+//    std::string tweet_debug = tweet.toUtf8().constData();
+//    std::cout<<tweet_debug;
 
     qsrand(QDateTime::currentDateTime().toTime_t());
     QString nonce = QString::number(qrand());
@@ -114,7 +122,7 @@ QObject::connect(manager, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(qui
         settings.setValue("error_mess",json.object().value("errors").toArray().at(0).toObject().value("message").toString());
     } else {
         settings.setValue("error_code",0);
-        settings.setValue("error_mess","none.");
+        settings.setValue("error_mess","none");
     }
     app->quit();
 }
