@@ -11,6 +11,7 @@
 #include <QCoreApplication>
 #include <QObject>
 #include <QThread>
+#include <QSettings>
 
 #include <openssl/sha.h>
 #include <openssl/hmac.h>

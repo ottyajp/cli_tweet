@@ -8,22 +8,38 @@ twit_func::twit_func(QObject *parent, QCoreApplication *coreApp)
 }
 
 void twit_func::run(){
-    QString consumer_key = "2pbR3eRsNfyjpsJw7Xs7JQ";
-    QString consumer_secret = "YLVys9QYBnXFV8DE6XeyA2jJNukTaNSoVZm6uMIa0hc";
-    QString oauth_token = "94249173-kS9KCoRK3y00zYz4lMb0KpqDcoyy9mWZPlT99Y54c";
-    QString oauth_token_secret = "CSO4Khpew2LwuyTFO5yjubQIuZyZcR9YoP37ibV3BA";
+    QString consumer_key;
+    QString consumer_secret;
+    QString oauth_token;
+    QString oauth_token_secret;
+
+    QSettings settings("tea_soak_lab", "cli_tweet");
+    if(settings.value("consumer_key").toString() == ""){
+        std::cout<<"アクセスのための情報がないやで"<<std::endl;
+        QTextStream in(stdin);
+        std::cout<<"Consumer key: ";
+        in>>consumer_key;
+        settings.setValue("consumer_key",consumer_key);
+        std::cout<<"Consumer secret: ";
+        in>>consumer_secret;
+        settings.setValue("consumer_secret",consumer_secret);
+        std::cout<<"oAuth token: ";
+        in>>oauth_token;
+        settings.setValue("oauth_token",oauth_token);
+        std::cout<<"oAuth token secret: ";
+        in>>oauth_token_secret;
+        settings.setValue("oauth_token_secret",oauth_token_secret);
+    } else {
+        consumer_key = settings.value("consumer_key").toString();
+        consumer_secret = settings.value("consumer_secret").toString();
+        oauth_token = settings.value("oauth_token").toString();
+        oauth_token_secret = settings.value("oauth_token_secret").toString();
+    }
+//    settings.setValue("tx_with_depo_limit",tx_with_depo_limit);
 
     QString update_url = "https://api.twitter.com/1.1/statuses/update.json";
 
-    QTextStream qstdin(stdin);
     QString tweet;
-/*    while(!qstdin.atEnd()){
-        tweet = qstdin.readLine();
-        if(tweet.isEmpty()){
-            break;
-        } else {
-        }
-    }*/
     std::cout<<"text:";
     QTextStream in(stdin);
     in>>tweet;
@@ -92,6 +108,6 @@ QObject::connect(manager, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(qui
 
     eventLoop.exec();
 
-    //qDebug()<<reply->readAll();
+    settings.setValue("reply",reply->readAll());
     app->quit();
 }
