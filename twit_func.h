@@ -18,9 +18,13 @@
 #include <QJsonValue>
 #include <QJsonArray>
 #include <QRegularExpression>
+#include <QCommandLineParser>
 
 #include <openssl/sha.h>
 #include <openssl/hmac.h>
+
+extern bool input;
+extern bool single;
 
 class twit_func : public QObject
 {

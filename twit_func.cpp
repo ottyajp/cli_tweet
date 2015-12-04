@@ -8,14 +8,6 @@ twit_func::twit_func(QObject *parent, QCoreApplication *coreApp)
 }
 
 void twit_func::run(){
-    QStringList argv = QCoreApplication::arguments();
-    bool input = false;
-    if(argv.size() > 1){
-        if(argv.at(1) == "input_auth_info"){
-            input = true;
-        }
-    }
-
     QSettings settings("tea_soak_lab", "cli_tweet");
     if(settings.value("error_code").toInt() != 0) input=true;
     if(settings.value("consumer_key").toString() == "") input=true;
@@ -53,6 +45,9 @@ void twit_func::run(){
             break;
         }else{
             post(tweet);
+            if(single == true){
+                break;
+            }
         }
     }
 
