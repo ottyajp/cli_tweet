@@ -28,13 +28,19 @@ class twit_func : public QObject
 
 public:
     twit_func(QObject *parent, QCoreApplication* coreApp);
+    void post(QString);
 
 public slots:
     void run();
 
 private:
     QCoreApplication* app;
+    QString consumer_key;
+    QString consumer_secret;
+    QString oauth_token;
+    QString oauth_token_secret;
 };
+
 
 #endif // TWIT_FUNC
 

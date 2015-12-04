@@ -15,10 +15,6 @@ void twit_func::run(){
             input = true;
         }
     }
-    QString consumer_key;
-    QString consumer_secret;
-    QString oauth_token;
-    QString oauth_token_secret;
 
     QSettings settings("tea_soak_lab", "cli_tweet");
     if(settings.value("error_code").toInt() != 0) input=true;
@@ -47,13 +43,6 @@ void twit_func::run(){
         in>>oauth_token_secret;
         settings.setValue("oauth_token_secret",oauth_token_secret);
     }
-    consumer_key = settings.value("consumer_key").toString();
-    consumer_secret = settings.value("consumer_secret").toString();
-    oauth_token = settings.value("oauth_token").toString();
-    oauth_token_secret = settings.value("oauth_token_secret").toString();
-
-
-    QString update_url = "https://api.twitter.com/1.1/statuses/update.json";
 
     QString tweet;
     std::cout<<"text:";
@@ -63,9 +52,21 @@ void twit_func::run(){
         if(tweet.isEmpty()){
             break;
         }else{
-    //in>>tweet;
-//    std::string tweet_debug = tweet.toUtf8().constData();
-//    std::cout<<tweet_debug;
+            post(tweet);
+        }
+    }
+
+    app->quit();
+}
+
+void twit_func::post(QString tweet){
+    QSettings settings("tea_soak_lab", "cli_tweet");
+    consumer_key = settings.value("consumer_key").toString();
+    consumer_secret = settings.value("consumer_secret").toString();
+    oauth_token = settings.value("oauth_token").toString();
+    oauth_token_secret = settings.value("oauth_token_secret").toString();
+
+    QString update_url = "https://api.twitter.com/1.1/statuses/update.json";
 
     qsrand(QDateTime::currentDateTime().toTime_t());
     QString nonce = QString::number(qrand());
@@ -138,8 +139,4 @@ QObject::connect(manager, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(qui
         settings.setValue("error_code",0);
         settings.setValue("error_mess","none");
     }
-        }
-    }
-
-    app->quit();
 }
