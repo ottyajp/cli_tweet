@@ -46,12 +46,12 @@ void twit_func::run(){
         std::cout<<"oAuth token secret: ";
         in>>oauth_token_secret;
         settings.setValue("oauth_token_secret",oauth_token_secret);
-    } else {
-        consumer_key = settings.value("consumer_key").toString();
-        consumer_secret = settings.value("consumer_secret").toString();
-        oauth_token = settings.value("oauth_token").toString();
-        oauth_token_secret = settings.value("oauth_token_secret").toString();
     }
+    consumer_key = settings.value("consumer_key").toString();
+    consumer_secret = settings.value("consumer_secret").toString();
+    oauth_token = settings.value("oauth_token").toString();
+    oauth_token_secret = settings.value("oauth_token_secret").toString();
+
 
     QString update_url = "https://api.twitter.com/1.1/statuses/update.json";
 
