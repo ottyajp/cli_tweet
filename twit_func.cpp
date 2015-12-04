@@ -37,7 +37,6 @@ void twit_func::run(){
     }
 
     QString tweet;
-    std::cout<<"text:";
     QTextStream in(stdin);
     while(!in.atEnd()){
         tweet = in.readLine();
