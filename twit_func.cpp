@@ -58,7 +58,12 @@ void twit_func::run(){
     QString tweet;
     std::cout<<"text:";
     QTextStream in(stdin);
-    in>>tweet;
+    while(!in.atEnd()){
+        tweet = in.readLine();
+        if(tweet.isEmpty()){
+            break;
+        }else{
+    //in>>tweet;
 //    std::string tweet_debug = tweet.toUtf8().constData();
 //    std::cout<<tweet_debug;
 
@@ -133,5 +138,8 @@ QObject::connect(manager, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(qui
         settings.setValue("error_code",0);
         settings.setValue("error_mess","none");
     }
+        }
+    }
+
     app->quit();
 }
